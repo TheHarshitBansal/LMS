@@ -1,14 +1,27 @@
 import { AiFillCloseCircle } from "react-icons/ai";
 import { FiMenu } from "react-icons/fi";
-import { Link } from "react-router-dom";
+import {useDispatch, useSelector} from 'react-redux'
+import { Link, useNavigate } from "react-router-dom";
 
 import Footer from "../components/Footer";
 
 function HomeLayout({children}) {
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  //For checking if user is logged in
+  const isLoggedIn = useSelector((state) => state?.auth?.isLoggedIn);
+
+  //For displaying options acc to role
+  const role = useSelector((state)=> state?.auth?.role)
+
   function changeWidth() {
     const drawerSide = document.getElementsByClassName("drawer-side");
     drawerSide[0].style.width = 'auto';
-    menu.style.hidden = false;
+
+    const menu = document.getElementsByClassName("drawer-button");
+    menu.style.hidden = true;
   }
 
   function hideDrawer() {
@@ -20,6 +33,15 @@ function HomeLayout({children}) {
 
     const menu = document.getElementsByClassName("drawer-button");
     menu.style.hidden = true;
+  }
+
+  async function handleLogout(e){
+    e.preventDefault();
+
+    //const res = await dispatch(logout())
+
+    //if(res?.payload?.success)
+    navigate('/')
   }
 
   return (
@@ -53,6 +75,11 @@ function HomeLayout({children}) {
             <li>
               <Link to="/">Home</Link>
             </li>
+            {isLoggedIn && role==='ADMIN' && (
+              <li>
+                <Link to='/admin/dashboard'>Admin Dashboard</Link>
+              </li>
+            )}
             <li>
               <Link to="/courses">All Courses</Link>
             </li>
@@ -63,6 +90,26 @@ function HomeLayout({children}) {
               <Link to="/about">About Us</Link>
             </li>
           </ul>
+          {!isLoggedIn && (
+              <div className="w-full absolute bottom-0">
+                <button className="btn-outline px-4 py-3 font-semibold w-full">
+                  <Link to='user/signup'>Sign up</Link>
+                </button>
+                <button className="btn-outline px-4 py-3 font-semibold w-full">
+                  <Link to='user/login'>Login</Link>
+                </button>
+              </div>
+            )}
+            {isLoggedIn && (
+              <div className="w-full absolute bottom-0">
+                <button className="btn-accent rounded-none btn px-4 py-3 font-semibold w-full">
+                  <Link to='/user/profile'>Profile</Link>
+                </button>
+                <button className="btn-ghost px-4 py-3 font-semibold w-full">
+                  <Link onClick={handleLogout}>Logout</Link>
+                </button>
+              </div>
+            )}
         </div>
       </div>
       {children}

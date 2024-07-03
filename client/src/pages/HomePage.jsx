@@ -4,10 +4,11 @@ import homePageImage from '../assets/images/homePageImage.webp'
 import HomeLayout from "../layouts/HomeLayout"
 
 function HomePage() {
+    
   return (
     <HomeLayout>
         <div className="pt-10 text-white flex items-center justify-center gap-10 mx-16 h-[90vh]">
-            <div className="w-1/2 space-y-6">
+            <div className="w-3/5 space-y-6">
                 <h1 className="text-5xl font-semibold">
                     Find out the best
                     <span className="text-yellow-500 font-bold"> Online Courses</span>
@@ -25,7 +26,7 @@ function HomePage() {
                     </Link>
                 </div>
             </div>
-            <div className="w-1/2 flex items-center justify-center">
+            <div className="w-2/5 flex items-center justify-center">
                 <img src={homePageImage} alt="HomePageImage" />
             </div>
         </div>
