@@ -48,15 +48,8 @@ function SignUp() {
         return;
     }
 
-    const formData = new FormData();
-    formData.append('name', signupData.name)
-    formData.append('email', signupData.email)
-    formData.append('password', signupData.password)
-    formData.append('avatar', signupData.avatar)
-
     //Dispatch create account action
-    const response = dispatch(createAccount(formData));
-    console.log(response);
+    const response = dispatch(createAccount(signupData));
     response
     .unwrap()
     .then(() => {
@@ -155,7 +148,7 @@ function SignUp() {
                   name="name"
                   id="name"
                   placeholder="Name"
-                  className="bg-gray-700 px-3 py-4"
+                  className="bg-gray-700 px-3 py-4 w-full"
                   onChange={handleUserInput}
                   value={signupData.name}
                 />
@@ -182,7 +175,7 @@ function SignUp() {
                   name="email"
                   id="email"
                   placeholder="Email"
-                  className="bg-gray-700 px-3 py-4"
+                  className="bg-gray-700 px-3 py-4 w-full"
                   onChange={handleUserInput}
                   value={signupData.email}
                 />
