@@ -92,20 +92,20 @@ function HomeLayout({children}) {
           </ul>
           {!isLoggedIn && (
               <div className="w-full absolute bottom-0">
-                <button className="btn-outline px-4 py-3 font-semibold w-full">
-                  <Link to='user/signup'>Sign up</Link>
+                <button className="btn-outline px-4 py-3 font-semibold w-full cursor-pointer">
+                  <Link to='/user/signup'>Sign up</Link>
                 </button>
-                <button className="btn-outline px-4 py-3 font-semibold w-full">
-                  <Link to='user/login'>Login</Link>
+                <button className="btn-outline px-4 py-3 font-semibold w-full cursor-pointer">
+                  <Link to='/user/login'>Login</Link>
                 </button>
               </div>
             )}
             {isLoggedIn && (
               <div className="w-full absolute bottom-0">
-                <button className="btn-accent rounded-none btn px-4 py-3 font-semibold w-full">
+                <button className="btn-accent rounded-none btn px-4 py-3 font-semibold w-full cursor-pointer">
                   <Link to='/user/profile'>Profile</Link>
                 </button>
-                <button className="btn-ghost px-4 py-3 font-semibold w-full">
+                <button className="btn-ghost px-4 py-3 font-semibold w-full cursor-pointer">
                   <Link onClick={handleLogout}>Logout</Link>
                 </button>
               </div>
