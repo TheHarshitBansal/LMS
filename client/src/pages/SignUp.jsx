@@ -62,7 +62,7 @@ function SignUp() {
         });
         setPreviewImage("");
     })
-    .catch((error) => {
+    .catch(() => {
         enqueueSnackbar('Failed to create account', {variant: 'error'})
     });
 }

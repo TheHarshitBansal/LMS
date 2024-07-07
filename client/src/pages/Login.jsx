@@ -1,18 +1,60 @@
+import {enqueueSnackbar} from "notistack"
 import { useState } from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { useDispatch } from "react-redux";
 import { Link, useNavigate } from 'react-router-dom'
 
 import lms from '../assets/images/lms.png'
+import { login } from "../Redux/Slices/authSlice.js";
 
 function Login() {
-
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    const [loginData, setLoginData] = useState({
+        email: "",
+        password: "",
+      });
+
     const [showPassword, setShowPassword] = useState(false);
+
+    function handleUserInput(e) {
+        const { name, value } = e.target;
+        setLoginData({
+          ...loginData,
+          [name]: value,
+        });
+    }
+
+    const loginUser = async (event) => {
+        event.preventDefault();
+    
+        //Form Validations
+        if(!loginData.email || !loginData.password){
+            enqueueSnackbar('All the fields are required', {variant:'error'});
+            return;
+        }
+
+        //Dispatch create account action
+        const response = dispatch(login(loginData));
+        response
+        .unwrap()
+        .then(() => {
+            navigate('/');
+            setLoginData({
+            email: "",
+            password: "",
+            });
+        })
+        .catch(() => {
+            enqueueSnackbar('Login failed', {variant: 'error'})
+        });
+    }
+
   return (
     <div className="flex items-center justify-center">
       <div className="flex items-center justify-center lg:w-1/2 max-lg:w-screen bg-gray-800 h-screen">
-        <form className="flex flex-col justify-center gap-3 rounded-lg px-5 py-8 text-white w-96">
+        <form onSubmit={loginUser} className="flex flex-col justify-center gap-3 rounded-lg px-5 py-8 text-white w-96">
               <img
                 src={lms}
                 alt="Avatar"
@@ -41,7 +83,9 @@ function Login() {
                   name="email"
                   id="email"
                   placeholder="Email"
-                  className="bg-gray-700 px-3 py-4"
+                  className="bg-gray-700 px-3 py-4 w-full"
+                  onChange={handleUserInput}
+                  value={loginData.email}
                 />
               </label>
             </div>
@@ -70,6 +114,8 @@ function Login() {
                   id="password"
                   placeholder="Password"
                   className="bg-gray-700 px-3 py-4 w-full"
+                  onChange={handleUserInput}
+                  value={loginData.password}
                 />
                 <button
                   type="button"
@@ -85,10 +131,10 @@ function Login() {
             </Link>
           </div>
           <div className="my-5 flex flex-col gap-3 justify-evenly">
-          <button className="btn bg-sky-600 rounded-xl text-white px-16 hover:bg-sky-700 text-md">
+          <button type="submit" className="btn bg-sky-600 rounded-xl text-white px-16 hover:bg-sky-700 text-md">
                 Login
             </button>
-            <button className="btn btn-outline rounded-xl text-white px-8 text-md" onClick={() => navigate(-1)}>
+            <button type="button" className="btn btn-outline rounded-xl text-white px-8 text-md" onClick={() => navigate(-1)}>
                 Go Back
             </button>
             

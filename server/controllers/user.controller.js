@@ -4,11 +4,14 @@ import AppError from "../utils/error.js";
 import generateResetPasswordEmail from "../utils/mailTemplate.js";
 import sendEmail from "../utils/sendEmail.js";
 import crypto from 'crypto'
+import { config } from "dotenv"; 
+config();
 
 const cookieOptions = {
     maxAge: 7*24*60*60*1000,
     httpOnly: true,
-    secure: true
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'none',
 }
 
 const register = async(req,res,next) => {
@@ -80,18 +83,20 @@ const login = async(req,res,next) => {
 
         res.status(200).json({
             success: true,
-            message: 'User logged in successfully'
+            message: 'User logged in successfully',
+            user,
         })
     } catch (e) {
         return next(new AppError(500, e.message))
     }
 }
 
-const logout = (req,res,next) => {
+const logout = (_req,res,_next) => {
     res.cookie('token', null, {
         secure: true,
         maxAge: 0,
-        httpOnly:true
+        httpOnly:true,
+        sameSite:'none'
     })
 
     res.status(200).json({
