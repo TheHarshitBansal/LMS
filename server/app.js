@@ -6,6 +6,7 @@ import connectionToDB from './config/dbConnection.js';
 import userRoutes from './routes/user.routes.js';
 import courseRoutes from './routes/course.routes.js'
 import paymentRoutes from './routes/payment.routes.js'
+import miscRoutes from './routes/miscellaneous.routes.js'
 import errorMiddleware from './middlewares/errorMiddleware.js';
 import { config } from 'dotenv';
 import { isLoggedIn } from './middlewares/authMiddleware.js';
@@ -26,6 +27,7 @@ app.use(morgan('dev'));
 app.use("/v1/user", userRoutes); //User Routes
 app.use("/v1/courses", courseRoutes)  //Courses Routes
 app.use("/v1/payment", isLoggedIn, paymentRoutes) //Payment Routes
+app.use('/v1', miscRoutes); //Misc Routes
 
 app.all('*', (req,res)=>{
     res.status(404).send("Page not found")

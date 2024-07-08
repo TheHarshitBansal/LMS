@@ -1,7 +1,8 @@
 import Course from "../models/course.model.js"
 import AppError from "../utils/error.js";
+import asyncHandler from "../middlewares/asyncHandler.middleware.js";
 
-const showAllCourses = async (req, res, next) => {
+const showAllCourses =  asyncHandler(async (req, res, next) => {
     const courses = await Course.find({}).select('-lectures');
 
     res.status(200).json({
@@ -9,9 +10,9 @@ const showAllCourses = async (req, res, next) => {
         message: "Courses fetched successfully",
         courses
     })
-}
+})
 
-const showCourse =  async(req, res, next) => {
+const showCourse =  asyncHandler(async(req, res, next) => {
     const {id} = req.params;
     const course = await Course.findById(id);
 
@@ -24,9 +25,9 @@ const showCourse =  async(req, res, next) => {
         message: "Course fetched successfully",
         course
     })
-}
+})
 
-const createCourse = async (req, res, next) => {
+const createCourse = asyncHandler(async (req, res, next) => {
     const {title, description, category, createdBy} = req.body;
 
     if(!title || !description || !category || !createdBy){
@@ -57,9 +58,9 @@ const createCourse = async (req, res, next) => {
         message: 'Course created successfully',
         course
     })
-}
+})
 
-const updateCourse = async (req, res, next) => {
+const updateCourse = asyncHandler(async (req, res, next) => {
     const {id} = req.params;
 
     const course = await Course.findByIdAndUpdate(
@@ -79,9 +80,9 @@ const updateCourse = async (req, res, next) => {
         success: true,
         message: 'Course updated successfully',
     })
-}
+})
 
-const deleteCourse = async (req, res, next) => {
+const deleteCourse = asyncHandler(async (req, res, next) => {
     const {id} = req.params;
 
     try {
@@ -99,9 +100,9 @@ const deleteCourse = async (req, res, next) => {
     } catch (error) {
         return next(new AppError(error.status, error.message));
     }
-}
+})
 
-const createLecture = async (req, res, next) => {
+const createLecture = asyncHandler(async (req, res, next) => {
     const {title, description} = req.body;
     const {id} = req.params;
 
@@ -135,9 +136,9 @@ const createLecture = async (req, res, next) => {
         message: 'Course lecture added successfully',
         course,
     })
-}
+})
 
-const updateLecture = async (req, res, next) => {
+const updateLecture = asyncHandler(async (req, res, next) => {
     const {id, lectureId} = req.params;
 
     const course = await Course.findById(id)
@@ -163,9 +164,9 @@ const updateLecture = async (req, res, next) => {
         success: true,
         message: 'Lecture updated successfully',
     })
-}
+})
 
-const deleteLecture = async (req, res, next) => {
+const deleteLecture = asyncHandler(async (req, res, next) => {
     const {id, lectureId} = req.params;
 
     const course = await Course.findById(id)
@@ -188,9 +189,9 @@ const deleteLecture = async (req, res, next) => {
         success: true,
         message: 'Lecture deleted successfully',
     })
-}
+})
 
-const showLecture = async (req, res, next) => {
+const showLecture = asyncHandler(async (req, res, next) => {
     const {id, lectureId} = req.params;
     const course = await Course.findById(id);
 
@@ -209,7 +210,7 @@ const showLecture = async (req, res, next) => {
         message: "Lecture fetched successfully",
         lecture
     })
-}
+})
 
 export{
     showAllCourses,

@@ -1,8 +1,9 @@
 import User from "../models/user.model.js";
 import AppError from "../utils/error.js";
 import jwt from "jsonwebtoken";
+import asyncHandler from './asyncHandler.middleware.js'
 
-const isLoggedIn = async (req,res,next) => {
+const isLoggedIn = asyncHandler(async (req,res,next) => {
     const {token} = req.cookies;
 
     if(!token){
@@ -12,7 +13,7 @@ const isLoggedIn = async (req,res,next) => {
     const userDetails = await jwt.verify(token, process.env.JWT_SECRET);
     req.user = userDetails;
     next();
-}
+})
 
 const isAdmin = (req, res, next) => {
     if(req.user.role !== 'ADMIN'){
@@ -21,14 +22,14 @@ const isAdmin = (req, res, next) => {
     next();
 }
 
-const isSubscriber = async(req, res, next) => {
+const isSubscriber = asyncHandler(async(req, res, next) => {
     const {id} = req.user;
     const user = await User.findById(id);
     if(user.subscription.status !== 'ACTIVE'){
         return next(new AppError(401, 'Unauthorized Access'))
     }
     next();
-}
+})
 
 export{
     isLoggedIn,

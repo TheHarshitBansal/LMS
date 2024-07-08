@@ -5,6 +5,7 @@ import generateResetPasswordEmail from "../utils/mailTemplate.js";
 import sendEmail from "../utils/sendEmail.js";
 import crypto from 'crypto'
 import { config } from "dotenv"; 
+import asyncHandler from '../middlewares/asyncHandler.middleware.js'
 config();
 
 const cookieOptions = {
@@ -14,7 +15,7 @@ const cookieOptions = {
     sameSite: 'none',
 }
 
-const register = async(req,res,next) => {
+const register = asyncHandler(async(req,res,next) => {
     const {name, email, password} = req.body;
      
     if(!name || !email || !password){
@@ -54,9 +55,9 @@ const register = async(req,res,next) => {
         message: 'User registered successfully',
         user,
     })
-}
+})
 
-const login = async(req,res,next) => {
+const login = asyncHandler(async(req,res,next) => {
     try {
         const {email, password} = req.body;
 
@@ -89,7 +90,7 @@ const login = async(req,res,next) => {
     } catch (e) {
         return next(new AppError(500, e.message))
     }
-}
+})
 
 const logout = (_req,res,_next) => {
     res.cookie('token', null, {
@@ -105,7 +106,7 @@ const logout = (_req,res,_next) => {
     })
 }
 
-const getProfile = async(req,res,next) => {
+const getProfile = asyncHandler(async(req,res,next) => {
     try {
         const userId = req.user.id;
         const user = await User.findById(userId);
@@ -118,9 +119,9 @@ const getProfile = async(req,res,next) => {
     } catch (error) {
         return next(new AppError(500, 'Failed to fetch user details. Please try again!S'))
     }
-}
+})
 
-const forgotPassword = async (req, res, next) => {
+const forgotPassword = asyncHandler(async (req, res, next) => {
     const {email} = req.body;
     if(!email){
         return next(new AppError(400, 'Email is required'))
@@ -162,9 +163,9 @@ const forgotPassword = async (req, res, next) => {
         await user.save();
         return next(new AppError(500, error.message));
     }
-}
+})
 
-const resetPassword = async (req, res, next) => {
+const resetPassword = asyncHandler(async (req, res, next) => {
     const token = req.params.resetId;
     const password = req.body.password;
 
@@ -194,9 +195,9 @@ const resetPassword = async (req, res, next) => {
         message: 'Password changed successfully'
     })
 
-}
+})
 
-const changePassword = async (req, res, next) => {
+const changePassword = asyncHandler(async (req, res, next) => {
     const {oldPassword, newPassword} = req.body;
     const {id} = req.user;
 
@@ -224,8 +225,8 @@ const changePassword = async (req, res, next) => {
         message: 'Password changed successfully'
     })
 }
-
-const updateProfile = async (req, res, next) => {
+)
+const updateProfile = asyncHandler(async (req, res, next) => {
     const {id} = req.user;
     const {name} = req.body;
 
@@ -248,7 +249,7 @@ const updateProfile = async (req, res, next) => {
         success: true,
         message: 'Profile updated successfully'
     })
-}
+})
 
 export {
     register,

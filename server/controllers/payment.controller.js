@@ -1,19 +1,19 @@
-import { log } from 'console';
 import razorpay from '../config/razorpayConfig.js';
 import Payment from '../models/payment.model.js';
 import User from '../models/user.model.js';
 import AppError from '../utils/error.js';
 import crypto from 'crypto'
+import asyncHandler from '../middlewares/asyncHandler.middleware.js'
 
-const getAPIKey = async (req, res, next) => {
+const getAPIKey = asyncHandler(async (req, res, next) => {
     res.status(200).json({
         success: true,
         message: "Razorpay API Key",
         key: process.env.RAZORPAY_KEY_ID,
     })
-}
+})
 
-const subscribe = async (req, res, next) => {
+const subscribe = asyncHandler(async (req, res, next) => {
     try{
         const {id} = req.user;
         const user = await User.findById(id);
@@ -49,9 +49,9 @@ const subscribe = async (req, res, next) => {
     catch(e){
         return next(new AppError(e.status, e.message))
     }
-}
+})
 
-const verifySubscription = async (req, res, next) => {
+const verifySubscription = asyncHandler(async (req, res, next) => {
     const {id} = req.user;
     const {razorpay_payment_id, razorpay_signature, razorpay_subscription_id} = req.body;
 
@@ -81,9 +81,9 @@ const verifySubscription = async (req, res, next) => {
         success: true,
         message: 'Payment verified successfully'
     })
-}
+})
 
-const unsubscribe = async (req, res, next) => {
+const unsubscribe = asyncHandler(async (req, res, next) => {
     const {id} = req.user;
     const user = await User.findById(id);
 
@@ -111,9 +111,9 @@ const unsubscribe = async (req, res, next) => {
         message: 'Subscription cancelled successfully'
     })
 
-}
+})
 
-const getPaymentInfo = async (req, res, next) => {
+const getPaymentInfo = asyncHandler(async (req, res, next) => {
     const { count, skip } = req.query;
 
   const allPayments = await razorpay.subscriptions.all({
@@ -177,7 +177,7 @@ const getPaymentInfo = async (req, res, next) => {
     finalMonths,
     monthlySalesRecord,
   });
-}
+})
 
 export{
     getAPIKey,
