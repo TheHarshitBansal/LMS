@@ -3,6 +3,7 @@ import './App.css'
 import { Route, Routes } from 'react-router-dom'
 
 import AboutUs from './pages/AboutUs'
+import ContactUs from './pages/Contact'
 import CourseList from './pages/courses/CourseList'
 import HomePage from './pages/HomePage'
 import Login from './pages/Login'
@@ -16,6 +17,7 @@ function App() {
     <Routes>
         <Route path='/' element={<HomePage/>}></Route>
         <Route path='/about' element={<AboutUs/>}></Route>
+        <Route path='/contact' element={<ContactUs/>}></Route>
         <Route path='/user/signup' element={<SignUp/>}></Route>
         <Route path='/user/login' element={<Login/>}></Route>
         <Route path='/courses' element={<CourseList/>}></Route>
