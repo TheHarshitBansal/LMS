@@ -16,7 +16,7 @@ export const contactUs = asyncHandler(async (req, res, next) => {
     const subject = 'Contact Us Form';
     const textMessage = `${name} - ${email} <br /> ${message}`;
 
-    await sendEmail(email, subject, textMessage);
+    await sendEmail(process.env.FROM_EMAIL, subject, textMessage);
   } catch (error) {
     console.log(error);
     return next(new AppError(error.message, 400));
