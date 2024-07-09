@@ -30,7 +30,7 @@ function CourseCard({data}) {
       </div>
     </div>
     <div className="flex justify-end">
-      <button onClick={()=>navigate('/courses/details')} className="cursor-pointer bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+      <button onClick={()=>navigate('/courses/details', {state:{...data}})} className="cursor-pointer bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
         See Course Content & Details
       </button>
     </div>
