@@ -11,7 +11,7 @@ config();
 const cookieOptions = {
     maxAge: 7*24*60*60*1000,
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
+    secure: false,
     sameSite: 'none',
 }
 
@@ -94,7 +94,7 @@ const login = asyncHandler(async(req,res,next) => {
 
 const logout = (_req,res,_next) => {
     res.cookie('token', null, {
-        secure: true,
+        secure:false,
         maxAge: 0,
         httpOnly:true,
         sameSite:'none'
