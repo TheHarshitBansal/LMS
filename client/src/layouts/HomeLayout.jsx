@@ -1,14 +1,13 @@
 import { enqueueSnackbar } from "notistack";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { FiMenu } from "react-icons/fi";
-import {useDispatch, useSelector} from 'react-redux'
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
 import Footer from "../components/Footer";
 import { logout } from "../Redux/Slices/authSlice.js";
 
-function HomeLayout({children}) {
-
+function HomeLayout({ children }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -16,11 +15,11 @@ function HomeLayout({children}) {
   const isLoggedIn = useSelector((state) => state?.auth?.isLoggedIn);
 
   //For displaying options acc to role
-  const role = useSelector((state)=> state?.auth?.role)
+  const role = useSelector((state) => state?.auth?.role);
 
   function changeWidth() {
     const drawerSide = document.getElementsByClassName("drawer-side");
-    drawerSide[0].style.width = 'auto';
+    drawerSide[0].style.width = "auto";
 
     const menu = document.getElementsByClassName("drawer-button");
     menu.style.hidden = true;
@@ -31,17 +30,17 @@ function HomeLayout({children}) {
     element[0].checked = false;
 
     const drawerSide = document.getElementsByClassName("drawer-side");
-    drawerSide[0].style.width = '0';
+    drawerSide[0].style.width = "0";
 
     const menu = document.getElementsByClassName("drawer-button");
     menu.style.hidden = true;
   }
 
-  async function handleLogout(e){
+  async function handleLogout(e) {
     e.preventDefault();
 
     await dispatch(logout());
-    navigate('/');
+    navigate("/");
   }
   return (
     <div className="min-h-[90vh]">
@@ -74,10 +73,15 @@ function HomeLayout({children}) {
             <li>
               <Link to="/">Home</Link>
             </li>
-            {isLoggedIn && role==='ADMIN' && (
-              <li>
-                <Link to='/admin/dashboard'>Admin Dashboard</Link>
-              </li>
+            {isLoggedIn && role === "ADMIN" && (
+              <>
+                <li>
+                  <Link to="/admin/dashboard">Admin Dashboard</Link>
+                </li>
+                <li>
+                  <Link to="/courses/create">Create Course</Link>
+                </li>
+              </>
             )}
             <li>
               <Link to="/courses">All Courses</Link>
@@ -90,29 +94,38 @@ function HomeLayout({children}) {
             </li>
           </ul>
           {!isLoggedIn && (
-              <div className="w-full absolute bottom-0">
+            <div className="w-full absolute bottom-0">
+              <Link to="/user/signup">
                 <button className="btn-outline px-4 py-3 font-semibold w-full cursor-pointer">
-                  <Link to='/user/signup'>Sign up</Link>
+                  Sign up
                 </button>
+              </Link>
+
+              <Link to="/user/login">
                 <button className="btn-outline px-4 py-3 font-semibold w-full cursor-pointer">
-                  <Link to='/user/login'>Login</Link>
+                  Login
                 </button>
-              </div>
-            )}
-            {isLoggedIn && (
-              <div className="w-full absolute bottom-0">
+              </Link>
+            </div>
+          )}
+          {isLoggedIn && (
+            <div className="w-full absolute bottom-0">
+              <Link to="/user/profile">
                 <button className="btn-accent rounded-none btn px-4 py-3 font-semibold w-full cursor-pointer">
-                  <Link to='/user/profile'>Profile</Link>
+                  Profile
                 </button>
+              </Link>
+              <Link onClick={handleLogout}>
                 <button className="btn-ghost px-4 py-3 font-semibold w-full cursor-pointer">
-                  <Link onClick={handleLogout}>Logout</Link>
+                  Logout
                 </button>
-              </div>
-            )}
+              </Link>
+            </div>
+          )}
         </div>
       </div>
       {children}
-      <Footer/>
+      <Footer />
     </div>
   );
 }
