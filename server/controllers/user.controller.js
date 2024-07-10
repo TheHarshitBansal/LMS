@@ -68,7 +68,7 @@ const login = asyncHandler(async(req,res,next) => {
         const user = await User.findOne({email}).select('+password')
 
         if (!user) {
-            return next(new AppError(400, 'Invalid Credentials'));
+            return next(new AppError(400, 'User does not exist'));
         }
 
         const isPasswordValid = await user.comparePassword(password);

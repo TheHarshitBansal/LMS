@@ -18,7 +18,7 @@ function SignUp() {
     name: "",
     email: "",
     password: "",
-    avatar: "",
+    avatar: null
   });
 
   const createNewAccount = async (event) => {
@@ -48,8 +48,15 @@ function SignUp() {
         return;
     }
 
+    const formData = new FormData();
+        formData.append("name", signupData.name);
+        formData.append("email", signupData.email);
+        formData.append("password", signupData.password);
+        formData.append("avatar", signupData.avatar);
+
+
     //Dispatch create account action
-    const response = dispatch(createAccount(signupData));
+    const response = dispatch(createAccount(formData));
     response
     .unwrap()
     .then(() => {
@@ -58,7 +65,7 @@ function SignUp() {
         name: "",
         email: "",
         password: "",
-        avatar: "",
+        avatar: null
         });
         setPreviewImage("");
     })
@@ -79,7 +86,7 @@ function SignUp() {
     e.preventDefault();
 
     const uploadedImage = e.target.files[0];
-    if (uploadedImage) {
+    if (!uploadedImage) return;
       setSignupData({
         ...signupData,
         avatar: uploadedImage,
@@ -88,8 +95,7 @@ function SignUp() {
       fileReader.readAsDataURL(uploadedImage);
       fileReader.addEventListener("load", function () {
         setPreviewImage(this.result);
-      });
-    }
+      })
   }
 
 

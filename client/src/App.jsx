@@ -11,6 +11,7 @@ import CreateCourse from './pages/courses/CreateCourse'
 import HomePage from './pages/HomePage'
 import Login from './pages/Login'
 import NotFound from './pages/NotFound'
+import Profiles from './pages/Profiles'
 import SignUp from './pages/SignUp'
 
 function App() {
@@ -28,6 +29,9 @@ function App() {
 
         <Route element={<RequireAuth allowedRoles={['ADMIN']}/>}>
           <Route path='/courses/create' element={<CreateCourse/>}></Route>
+        </Route>
+        <Route element={<RequireAuth allowedRoles={['ADMIN', 'USER']}/>}>
+          <Route path='/user/profile' element={<Profiles/>}></Route>
         </Route>
 
         <Route path='*' element={<NotFound/>}></Route>
