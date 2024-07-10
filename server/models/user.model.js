@@ -64,7 +64,7 @@ const userSchema = new Schema({
         if(!this.isModified('password')){
             return next();
         }
-        this.password = await hash(this.password, 20)
+        this.password = await hash(this.password, 12)
         next();
     })
 

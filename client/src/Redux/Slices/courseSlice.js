@@ -1,5 +1,5 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
-import { enqueueSnackbar } from 'notistack';
+import { closeSnackbar, enqueueSnackbar } from 'notistack';
 
 import axiosInstance from '../../helpers/axiosInstance.js'
 
@@ -20,6 +20,24 @@ export const getAllCourses = createAsyncThunk("/courses/get", async (_,{rejectWi
     }
 })
 
+export const createCourse = createAsyncThunk("/courses/create", async(data,{rejectWithValue})=>{
+    let loadingSnackbarKey ;
+    try {
+        loadingSnackbarKey = enqueueSnackbar('Creating new course. Please wait!', { variant: 'warning', persist:true});
+
+        await axiosInstance.post('/courses', data)
+        closeSnackbar(loadingSnackbarKey)
+        enqueueSnackbar('Course created successfully!', { variant: 'success' });
+    } catch (error) {
+        closeSnackbar(loadingSnackbarKey)
+        enqueueSnackbar(
+            error?.response?.data?.message || 'Something went wrong',
+            { variant: 'error' }
+          );
+          return rejectWithValue(error.response.data);
+    }
+})
+
 const courseSlice = createSlice({
     name: 'course',
     initialState,
@@ -28,10 +46,12 @@ const courseSlice = createSlice({
         builder
         .addCase(getAllCourses.fulfilled, (state, action)=>{
             if(action?.payload){
-                console.log(action?.payload);
                 state.courseData = [...action.payload]
             }
         })
+        // .addCase(createCourse.fulfilled, (state, action) =>{
+
+        // })
     }
 })
 
