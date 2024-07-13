@@ -1,15 +1,12 @@
-import { useEffect } from "react"
 import { useSelector } from "react-redux";
-import { useLocation } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 
 import HomeLayout from "../../layouts/HomeLayout";
 
 function CourseDescription() {
     const {state} = useLocation();
-    const {role} = useSelector((state) => state.auth);
-    useEffect(()=>{
-        console.log(state);
-    }, [])
+    const user = useSelector((state) => state.auth.data);
+
   return (
     <HomeLayout>
     <div className="bg-gradient-to-r from-gray-800 via-gray-900 to-black text-white min-h-screen p-6">
@@ -38,13 +35,13 @@ function CourseDescription() {
             }
           </div>
         </div>
-        {role ==='ADMIN' || state?.subscription?.status === 'ACTIVE' ?
+        {user.role ==='ADMIN' || user?.subscription?.status === 'ACTIVE' ?
         (<button className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded mt-6 transition-transform transform hover:scale-105">
           View All Lectures
         </button>) 
-        : (<button className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded mt-6 transition-transform transform hover:scale-105">
-            Get Subscription
-          </button>)
+        : (<Link to={'/checkout'}><button className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded mt-6 transition-transform transform hover:scale-105">
+          Get Subscription
+        </button></Link>)
 }
       </div>
     </div>

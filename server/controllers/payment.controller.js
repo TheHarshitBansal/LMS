@@ -4,6 +4,8 @@ import User from '../models/user.model.js';
 import AppError from '../utils/error.js';
 import crypto from 'crypto'
 import asyncHandler from '../middlewares/asyncHandler.middleware.js'
+import { config } from 'dotenv';
+config();
 
 const getAPIKey = asyncHandler(async (req, res, next) => {
     res.status(200).json({
@@ -37,7 +39,6 @@ const subscribe = asyncHandler(async (req, res, next) => {
         })
 
         user.subscription.id = subscriptionDetails.id;
-        user.subscription.status = 'ACTIVE';
 
         await user.save();
 

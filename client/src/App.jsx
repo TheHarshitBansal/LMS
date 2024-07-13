@@ -12,6 +12,7 @@ import EditProfile from './pages/EditProfile'
 import HomePage from './pages/HomePage'
 import Login from './pages/Login'
 import NotFound from './pages/NotFound'
+import Checkout from './pages/payments/Checkout'
 import Profiles from './pages/Profiles'
 import SignUp from './pages/SignUp'
 
@@ -30,6 +31,9 @@ function App() {
 
         <Route element={<RequireAuth allowedRoles={['ADMIN']}/>}>
           <Route path='/courses/create' element={<CreateCourse/>}></Route>
+        </Route>
+        <Route element={<RequireAuth allowedRoles={['USER']}/>}>
+          <Route path='/checkout' element={<Checkout/>}></Route>
         </Route>
         <Route element={<RequireAuth allowedRoles={['ADMIN', 'USER']}/>}>
           <Route path='/user/profile' element={<Profiles/>}></Route>

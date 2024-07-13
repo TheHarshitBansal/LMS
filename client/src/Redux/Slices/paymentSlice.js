@@ -25,15 +25,10 @@ export const getRazorpayId = createAsyncThunk('/payment/getId', async()=>{
 })
 
 export const subscribeCourse = createAsyncThunk('/payment/subscribe', async()=>{
-    let loadingSnackbarKey ;
   try {
-      loadingSnackbarKey = enqueueSnackbar('Subscribing. Please wait!', { variant: 'warning', persist:true});
         const response = await axiosInstance.post('/payment/subscribe');
-        closeSnackbar(loadingSnackbarKey)
-        enqueueSnackbar('Subscribed!', { variant: 'success' });
         return response.data
         } catch (error) {
-            closeSnackbar(loadingSnackbarKey)
         enqueueSnackbar(
             error?.response?.data?.message || 'Failed to subscribe course',
             { variant: 'error' }
@@ -42,14 +37,19 @@ export const subscribeCourse = createAsyncThunk('/payment/subscribe', async()=>{
 })
 
 export const verifySubscription = createAsyncThunk('/payment/verify', async(data)=>{
+    let loadingSnackbarKey ;
     try {
+        loadingSnackbarKey = enqueueSnackbar('Subscribing. Please wait!', { variant: 'warning', persist:true});
         const response = await axiosInstance.post('/payment/verify', {
             razorpay_payment_id: data.razorpay_payment_id,
             razorpay_signature: data.razorpay_signature,
             razorpay_subscription_id: data.razorpay_subscription_id
         });
+        closeSnackbar(loadingSnackbarKey)
+        enqueueSnackbar('Subscribed!', { variant: 'success' });
     return response.data
     } catch (error) {
+        closeSnackbar(loadingSnackbarKey)
         enqueueSnackbar(
             error?.response?.data?.message || 'Failed to verify subscription',
             { variant: 'error' }
