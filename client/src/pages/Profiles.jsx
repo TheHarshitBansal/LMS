@@ -1,14 +1,21 @@
 import { enqueueSnackbar } from "notistack";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import HomeLayout from "../layouts/HomeLayout";
 import { getProfile } from "../Redux/Slices/authSlice";
+import { unsubscribeCourse } from "../Redux/Slices/paymentSlice";
 
 function Profiles() {
+  const navigate = useNavigate()
   const dispatch = useDispatch();
   const [user, setUser] = useState(null);
+
+  const cancelSubscription = async () => {
+    await dispatch(unsubscribeCourse())
+    navigate('/')
+  }
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -21,6 +28,7 @@ function Profiles() {
     };
     fetchProfile();
   }, [dispatch]);
+
 
   if (!user) {
     return (
@@ -66,6 +74,10 @@ function Profiles() {
                 Edit Profile
               </button>
             </Link>
+            {user.subscription.status === 'ACTIVE' &&
+              <button onClick={()=>cancelSubscription()} className="bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 rounded">
+                Unsubscribe
+              </button>}
             <button className="bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded">
               Change Password
             </button>
