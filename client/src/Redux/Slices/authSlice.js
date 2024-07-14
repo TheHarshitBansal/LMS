@@ -101,6 +101,23 @@ export const getProfile = createAsyncThunk('/auth/getUser', async (_, { rejectWi
   }
 })
 
+export const changePassword = createAsyncThunk('/auth/pass/change', async (data, { rejectWithValue }) => {
+  let loadingSnackbarKey ;
+  try {
+      loadingSnackbarKey = enqueueSnackbar('Changing password. Please wait!', { variant: 'warning', persist:true});
+
+    await axiosInstance.post('/user/change-password', data);
+      closeSnackbar(loadingSnackbarKey)
+    enqueueSnackbar('Password changed successfully!', { variant: 'success' });
+  } catch (error) {
+    closeSnackbar(loadingSnackbarKey)
+    enqueueSnackbar(
+      error?.response?.data?.message || 'Failed to change password',
+      { variant: 'error' }
+    );
+    return rejectWithValue(error.response.data);
+  }
+})
 
 const authSlice = createSlice({
     name: 'auth',

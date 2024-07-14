@@ -78,9 +78,11 @@ function Profiles() {
               <button onClick={()=>cancelSubscription()} className="bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 rounded">
                 Unsubscribe
               </button>}
+            <Link to="/user/change-password">
             <button className="bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded">
               Change Password
             </button>
+            </Link>
           </div>
         </div>
       </div>

@@ -4,6 +4,7 @@ import { Route, Routes } from 'react-router-dom'
 
 import RequireAuth from './components/RequireAuth'
 import AboutUs from './pages/AboutUs'
+import ChangePassword from './pages/ChangePassword'
 import ContactUs from './pages/Contact'
 import CourseDescription from './pages/courses/CourseDescription'
 import CourseList from './pages/courses/CourseList'
@@ -32,12 +33,15 @@ function App() {
         <Route element={<RequireAuth allowedRoles={['ADMIN']}/>}>
           <Route path='/courses/create' element={<CreateCourse/>}></Route>
         </Route>
+
         <Route element={<RequireAuth allowedRoles={['USER']}/>}>
           <Route path='/checkout' element={<Checkout/>}></Route>
         </Route>
+
         <Route element={<RequireAuth allowedRoles={['ADMIN', 'USER']}/>}>
           <Route path='/user/profile' element={<Profiles/>}></Route>
           <Route path='/user/edit' element={<EditProfile/>}></Route>
+          <Route path='/user/change-password' element={<ChangePassword/>}></Route>
         </Route>
 
         <Route path='*' element={<NotFound/>}></Route>
