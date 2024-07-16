@@ -14,6 +14,7 @@ function RequireAuth({allowedRoles}) {
             return <Navigate to="/" />;
         }
     } else {
+        enqueueSnackbar('Login Required', { variant: 'error' });
         return <Navigate to="/user/login" />;
     }
 }

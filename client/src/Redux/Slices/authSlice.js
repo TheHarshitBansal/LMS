@@ -109,10 +109,47 @@ export const changePassword = createAsyncThunk('/auth/pass/change', async (data,
     await axiosInstance.post('/user/change-password', data);
       closeSnackbar(loadingSnackbarKey)
     enqueueSnackbar('Password changed successfully!', { variant: 'success' });
+    
   } catch (error) {
     closeSnackbar(loadingSnackbarKey)
     enqueueSnackbar(
       error?.response?.data?.message || 'Failed to change password',
+      { variant: 'error' }
+    );
+    return rejectWithValue(error.response.data);
+  }
+})
+
+export const setResetPassword = createAsyncThunk('/auth/pass/new', async (data, { rejectWithValue }) => {
+  let loadingSnackbarKey ;
+  try {
+    loadingSnackbarKey = enqueueSnackbar('Resetting password. Please wait!', { variant: 'warning', persist:true});
+    const response = await axiosInstance.post(`/user/reset/${data.id}`, {'password' : data.password});
+    closeSnackbar(loadingSnackbarKey)
+    enqueueSnackbar('Password reset successfully!', { variant: 'success' });
+    return response.data;
+  } catch (error) {
+    closeSnackbar(loadingSnackbarKey)
+    enqueueSnackbar(
+      error?.response?.data?.message || 'Failed to reset password',
+      { variant: 'error' }
+    );
+    return rejectWithValue(error.response.data);
+  }
+})
+
+export const resetPassword = createAsyncThunk('/auth/pass/reset', async (data, { rejectWithValue }) => {
+  let loadingSnackbarKey ;
+  try {
+    loadingSnackbarKey = enqueueSnackbar('Please wait!', { variant: 'warning', persist:true});
+    const response = await axiosInstance.post('/user/reset', data);
+    closeSnackbar(loadingSnackbarKey)
+    enqueueSnackbar('Link sent successfully!', { variant: 'success' });
+    return response.data;
+  } catch (error) {
+    closeSnackbar(loadingSnackbarKey)
+    enqueueSnackbar(
+      error?.response?.data?.message || 'Failed to send link',
       { variant: 'error' }
     );
     return rejectWithValue(error.response.data);

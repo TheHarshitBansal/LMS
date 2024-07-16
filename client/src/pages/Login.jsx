@@ -126,7 +126,7 @@ function Login() {
                 </button>
               </label>
             </div>
-            <Link to="/user/signup" className="text-info link cursor-pointer text-right">
+            <Link to="/user/forgot-password" className="text-info link cursor-pointer text-right">
               Forgot password ?
             </Link>
           </div>

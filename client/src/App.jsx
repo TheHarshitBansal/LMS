@@ -5,6 +5,7 @@ import { Route, Routes } from 'react-router-dom'
 import RequireAuth from './components/RequireAuth'
 import AboutUs from './pages/AboutUs'
 import ChangePassword from './pages/ChangePassword'
+import ChangeResetPassword from './pages/ChangeResetPassword'
 import ContactUs from './pages/Contact'
 import CourseDescription from './pages/courses/CourseDescription'
 import CourseList from './pages/courses/CourseList'
@@ -15,6 +16,7 @@ import Login from './pages/Login'
 import NotFound from './pages/NotFound'
 import Checkout from './pages/payments/Checkout'
 import Profiles from './pages/Profiles'
+import ResetPassword from './pages/ResetPassword'
 import SignUp from './pages/SignUp'
 
 function App() {
@@ -29,6 +31,8 @@ function App() {
         <Route path='/user/login' element={<Login/>}></Route>
         <Route path='/courses' element={<CourseList/>}></Route>
         <Route path='/courses/details' element={<CourseDescription/>}></Route>
+        <Route path='/user/forgot-password' element={<ResetPassword/>}></Route>
+        <Route path='/user/reset/:resetId' element={<ChangeResetPassword/>}></Route>
 
         <Route element={<RequireAuth allowedRoles={['ADMIN']}/>}>
           <Route path='/courses/create' element={<CreateCourse/>}></Route>

@@ -59,8 +59,7 @@ const register = asyncHandler(async(req,res,next) => {
 
 const login = asyncHandler(async(req,res,next) => {
     try {
-        const {email, password} = req.body;
-
+        const {email, password} = req.body;;
         if(!email || !password){
             return next(new AppError(400, 'All fields are required'))
         }
@@ -134,16 +133,9 @@ const forgotPassword = asyncHandler(async (req, res, next) => {
 
     const resetToken = await user.generateResetToken();
 
-    // Log user instance before saving
-    console.log('User before saving:', user);
-
     await user.save();
 
-    // Log user instance after saving
-    console.log('User after saving:', user);
-
-
-    const resetPasswordURL = `${process.env.FRONTEND_URL}/v1/user/reset/${resetToken}`;
+    const resetPasswordURL = `${process.env.FRONTEND_URL}/user/reset/${resetToken}`;
 
     const subject = 'Reset Password for LMS';
     const message = generateResetPasswordEmail(resetPasswordURL)
@@ -167,7 +159,7 @@ const forgotPassword = asyncHandler(async (req, res, next) => {
 
 const resetPassword = asyncHandler(async (req, res, next) => {
     const token = req.params.resetId;
-    const password = req.body.password;
+    const {password} = req.body;
 
     if(!password){
         return next(new AppError(400, 'New password is required'))
@@ -183,16 +175,17 @@ const resetPassword = asyncHandler(async (req, res, next) => {
     if(!user){
         return next(new AppError(400, "Link is invalid or expired, please try again!"))
     }
-
-    user.password = await hash(password, 20);
+    
+   user.password = password;
+    
     user.forgotPasswordToken = undefined;
     user.forgotPasswordExpiry = undefined;
 
     await user.save();
-
+    console.log(`Hashed pass : ${user.password}`);
     res.status(200).json({
         success: true,
-        message: 'Password changed successfully'
+        message: 'Password changed successfully',
     })
 
 })
