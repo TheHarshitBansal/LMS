@@ -32,6 +32,7 @@ function Checkout() {
     }
     const options = {
       key: key,
+      amount: 99900,
       subscription_id: subscription_id,
       name: "Learnify Pvt. Ltd.",
       description: "Purchase Subscription",
@@ -43,6 +44,7 @@ function Checkout() {
         name: userData.name
       },
       handler: async function (response) {
+        console.log(response);
         paymentDetails.razorpay_payment_id = response?.razorpay_payment_id;
         paymentDetails.razorpay_signature = response?.razorpay_signature;
         paymentDetails.razorpay_subscription_id = response?.razorpay_subscription_id;

@@ -1,11 +1,29 @@
-import { useSelector } from "react-redux";
+import { enqueueSnackbar } from "notistack";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { Link, useLocation } from "react-router-dom"
 
 import HomeLayout from "../../layouts/HomeLayout";
+import { getProfile } from "../../Redux/Slices/authSlice";
 
 function CourseDescription() {
     const {state} = useLocation();
-    const user = useSelector((state) => state.auth.data);
+    const dispatch = useDispatch();
+    const [user, setUser] = useState({});
+
+
+    useEffect(() => {
+      const fetchProfile = async () => {
+        try {
+          const res = await dispatch(getProfile()).unwrap();
+          console.log(res.user);
+          setUser(res.user);
+        } catch (error) {
+          enqueueSnackbar("Failed to fetch profile", { variant: "error" });
+        }
+      };
+      fetchProfile();
+    }, [dispatch]);
 
   return (
     <HomeLayout>

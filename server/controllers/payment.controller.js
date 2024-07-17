@@ -46,6 +46,7 @@ const subscribe = asyncHandler(async (req, res, next) => {
             success: true,
             message: 'Subscribed',
             subscription_id: subscriptionDetails.id,
+            subscriptionDetails,
         })}
     catch(e){
         return next(new AppError(e.status, e.message))
@@ -60,13 +61,6 @@ const verifySubscription = asyncHandler(async (req, res, next) => {
 
     if(!user){
         return next(new AppError(400, 'User does not exists'))
-    }
-
-    const subscriptionId = user.subscription.id; 
-    const generatedSignature = crypto.createHmac('sha256', process.env.RAZORPAY_KEY_SECRET).update(`${razorpay_payment_id}|${subscriptionId}`).digest('hex')
-
-    if(generatedSignature !== razorpay_signature){
-        return next(new AppError(500, 'Payment not verified. Please try again!'))
     }
 
     await Payment.create({

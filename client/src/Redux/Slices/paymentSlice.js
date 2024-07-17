@@ -57,7 +57,7 @@ export const verifySubscription = createAsyncThunk('/payment/verify', async(data
     }
 })
 
-export const unsubscribeCourse = createAsyncThunk('/payment/unsubscribe', async(data)=>{
+export const unsubscribeCourse = createAsyncThunk('/payment/unsubscribe', async()=>{
     let loadingSnackbarKey ;
   try {
       loadingSnackbarKey = enqueueSnackbar('Unsubscribing. Please wait!', { variant: 'warning', persist:true});
@@ -74,7 +74,7 @@ export const unsubscribeCourse = createAsyncThunk('/payment/unsubscribe', async(
     }
 })
 
-export const getPaymentDetails = createAsyncThunk('/payment/details', async(data)=>{
+export const getPaymentDetails = createAsyncThunk('/payment/details', async()=>{
     let loadingSnackbarKey ;
   try {
       loadingSnackbarKey = enqueueSnackbar('Fetching details. Please wait!', { variant: 'warning', persist:true});
