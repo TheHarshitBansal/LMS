@@ -15,7 +15,7 @@ config();
 const app = express();
 const port = process.env.PORT || 3000;
 app.use(cors({
-    origin: [process.env.FRONTEND_URL]  // Replace with your frontend's origin
+    origin: [process.env.FRONTEND_URL], 
     credentials: true  // Allow credentials (cookies, authorization headers, etc.)
 }));
 app.use(express.json());
