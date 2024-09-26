@@ -4,8 +4,9 @@ import jwt from "jsonwebtoken";
 import asyncHandler from './asyncHandler.middleware.js'
 
 const isLoggedIn = asyncHandler(async (req,res,next) => {
-    const {token} = req.cookies;
-
+    const token = req.headers.authorization.split(' ')[1];
+    console.log(token);
+    
     if(!token){
         return next(new AppError(401, 'User not logged in'))
     }

@@ -6,14 +6,16 @@ import sendEmail from "../utils/sendEmail.js";
 import crypto from 'crypto'
 import { config } from "dotenv"; 
 import asyncHandler from '../middlewares/asyncHandler.middleware.js'
+import { log } from "console";
+
 config();
 
-const cookieOptions = {
-    maxAge: 7*24*60*60*1000,
-    httpOnly: true,
-    secure: false,
-    sameSite: 'none',
-}
+// const cookieOptions = {
+//     maxAge: 7*24*60*60*1000,
+//     httpOnly: true,
+//     secure: false,
+//     sameSite: 'none',
+// }
 
 const register = asyncHandler(async(req,res,next) => {
     const {name, email, password} = req.body;
@@ -48,11 +50,10 @@ const register = asyncHandler(async(req,res,next) => {
 
     const token = await user.generateJWTToken()
 
-    res.cookie('token', token, cookieOptions);
-
     res.status(200).json({
         success: true,
         message: 'User registered successfully',
+        token,
         user,
     })
 })
@@ -79,11 +80,10 @@ const login = asyncHandler(async(req,res,next) => {
         const token = await user.generateJWTToken();
         user.password = undefined;
 
-        res.cookie('token', token, cookieOptions);
-
         res.status(200).json({
             success: true,
             message: 'User logged in successfully',
+            token,
             user,
         })
     } catch (e) {
@@ -92,12 +92,6 @@ const login = asyncHandler(async(req,res,next) => {
 })
 
 const logout = (_req,res,_next) => {
-    res.cookie('token', null, {
-        secure:false,
-        maxAge: 0,
-        httpOnly:true,
-        sameSite:'none'
-    })
 
     res.status(200).json({
         success: true,
@@ -116,7 +110,7 @@ const getProfile = asyncHandler(async(req,res,next) => {
             user,
         })
     } catch (error) {
-        return next(new AppError(500, 'Failed to fetch user details. Please try again!S'))
+        return next(new AppError(500, 'Failed to fetch user details. Please try again!'))
     }
 })
 
@@ -191,9 +185,9 @@ const resetPassword = asyncHandler(async (req, res, next) => {
 })
 
 const changePassword = asyncHandler(async (req, res, next) => {
-    const {oldPassword, newPassword} = req.body;
+    const {oldPassword, newPassword} = req.body;  
     const {id} = req.user;
-
+    
     if(!oldPassword || !newPassword){
         return next(new AppError(400, "All fields are required."));
     }
